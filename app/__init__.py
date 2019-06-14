@@ -12,7 +12,7 @@ def create_app(config_name):
     db.init_app(app)
 
     from .notes import notes
-    app.register_blueprint(notes)
+    app.register_blueprint(notes, url_prefix='/notes')
 
 
     return app
