@@ -21,7 +21,29 @@ def create():
     except ValidationError as err:
         return jsonify(err.messages), 422
 
-    note = Note(title=data.data['title'])
+    note = Note(title=data.data['title'], note=data.data['note'])
+    db.session.add(note)
+    db.session.commit()
+    return jsonify(note_schema.dump(note).data)
+
+
+@notes.route('/<id>', methods=['PUT'])
+def update(id):
+    json_data = request.json
+    if not json_data:
+        return jsonify({'message': 'No input data provided'}), 400
+
+    try:
+        data = note_schema.load(json_data)
+    except ValidationError as err:
+        return jsonify(err.messages), 422
+
+    note = Note.query.filter_by(id=id).first()
+    print(note)
+    if not note:
+        return "", 404
+    note.title = data.data['title']
+    note.note = data.data['note']
     db.session.add(note)
     db.session.commit()
     return jsonify(note_schema.dump(note).data)
