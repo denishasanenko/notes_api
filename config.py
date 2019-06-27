@@ -1,6 +1,9 @@
+import os
+
 class Config:
     SECRET_KEY = '123'
-    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:admin@localhost:5432/notes'
+    PORT = os.environ.get("PORT", default=3000)
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL", default='postgresql://postgres:admin@localhost:5432/notes')
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_TRACK_MODIFICATIONS = 'models_committed'
 
