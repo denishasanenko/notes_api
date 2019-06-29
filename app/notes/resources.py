@@ -10,6 +10,14 @@ def get_list():
     notes_list = notes_schema.dump(notes_query)
     return jsonify(notes_list.data)
 
+@notes.route('/<id>')
+def get_one(id):
+    note_row = Note.query.filter_by(id=id).first()
+    if not note_row:
+        return "", 404
+    note = note_schema.dump(note_row)
+    return jsonify(note.data)
+
 @notes.route('/', methods=['POST'])
 def create():
     json_data = request.json
